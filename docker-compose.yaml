@@ -1,0 +1,41 @@
+version: "3"
+services:
+
+  keycloak_n1:
+    image: "quay.io/keycloak/keycloak:17.0.1"
+    ports:
+      - "8443:8443"
+    environment:
+      - KEYCLOAK_ADMIN=${KC_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KC_ADMIN_PASSWORD}
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=pg_sql:5432
+      - KC_DB_URL_DATABASE=${DB_NAME}
+      - KC_DB_USERNAME=${DB_USERNAME}
+      - KC_DB_PASSWORD=${DB_PASSWORD}
+      - KC_DB_SCHEMA=public
+      - KC_HOSTNAME=localhost
+      - KC_HTTPS_KEY_STORE_FILE=/keystore/server.keystore
+      - KC_FEATURES=token-exchange
+      - KC_METRICS_ENABLED=true
+    command:
+      start --auto-build
+    volumes:
+      - "./conf/server.keystore:/keystore/server.keystore"
+    depends_on:
+      - pg_sql
+
+  pg_sql:
+    image: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+
+volumes:
+  postgres_data:
+      driver: local

@@ -1,2 +1,39 @@
-# keycloak-cluster
-Keycloak Cluster
+# Keycloak Cluster
+The goal of this repo is to demonstrate how we can have fault tolerant, scalable Keycloak application
+and how it operates in a cluster.
+
+
+### What is Keycloak ?
+Keycloak is an open source identity and access management tool,
+it adds authentication to applications and secure services with minimum effort.
+No need to deal with storing users or authenticating users.
+Keycloak provides user federation, strong authentication, user management, fine-grained authorization, and more.
+
+*For more visite:*
+[website](https://www.keycloak.org)
+
+### Configurations
+**.env** file is where the most sensitive information is stored, here we keep environmental variables
+that should be injected by a safe tool like vault or jenkins credentials.
+
+### Generating a localhost (self signed certificate)
+To be able to expose a HTTPS (encrypting the data being transmitted over http protocol) a certificate is required.
+Use the following line to create a keystore for the localhost domain.
+The keystore will later on be injected inside of the container for keycloak to use.
+
+```bash
+keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
+```
+
+### Docker Compose
+Use ***docker compose*** to ***start*** and ***stop*** the servers
+
+*to start up the servers use:*
+```bash
+docker-compose up
+```
+
+*To stop the servers use:*
+```bash
+docker-compose down
+```
