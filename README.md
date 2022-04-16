@@ -16,14 +16,21 @@ Keycloak provides user federation, strong authentication, user management, fine-
 **.env** file is where the most sensitive information is stored, here we keep environmental variables
 that should be injected by a safe tool like vault or jenkins credentials.
 
-### Generating a localhost (self signed certificate)
+### Generating a localhost (self signed certificate) for Keycloak nodes
 To be able to expose a HTTPS (encrypting the data being transmitted over http protocol) a certificate is required.
 Use the following line to create a keystore for the localhost domain.
-The keystore will later on be injected inside of the container for keycloak to use.
+The Keystore will later on be injected inside of the container for keycloak to use.
+Please use the DNS Name for each node in case you are running it on your a real network.
 
 ```bash
 keytool -genkeypair -storepass password -storetype PKCS12 -keyalg RSA -keysize 2048 -dname "CN=server" -alias server -ext "SAN:c=DNS:localhost,IP:127.0.0.1" -keystore conf/server.keystore
 ```
+
+### Creating a self signed certificate for NGINX ( proxy / loadbalancer )
+```bash
+openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out MyCert.crt -keyout MyKey.key
+```
+![Creating SSL Cert](/images/openssl.png "Creating SSL Certificate")
 
 ### Docker Compose
 Use ***docker compose*** to ***start*** and ***stop*** the servers
