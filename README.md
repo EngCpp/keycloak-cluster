@@ -32,6 +32,14 @@ openssl req -new -newkey rsa:4096 -x509 -sha256 -days 365 -nodes -out MyCert.crt
 ```
 ![Creating SSL Cert](/images/openssl.png "Creating SSL Certificate")
 
+### For this example to work you may need to add a fake dns name to your hosts file (if you are using linux)
+go to /etc/hosts and add the line below
+```bash
+127.0.0.1       keycloak.cluster.com
+```
+This will enable the hostname **keycloak.cluster.com** so your browser will convert it to 127.0.0.1 which is localhost.
+
+
 ### Docker Compose
 Use ***docker compose*** to ***start*** and ***stop*** the servers
 
